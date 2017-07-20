@@ -24,6 +24,7 @@ namespace pocketmine\inventory;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\network\protocol\BlockEventPacket;
+use pocketmine\network\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 use pocketmine\tile\Chest;
 
@@ -138,6 +139,7 @@ class DoubleChestInventory extends ChestInventory implements InventoryHolder {
 			$pk->case1 = 1;
 			$pk->case2 = 2;
 			if(($level = $this->right->getHolder()->getLevel()) instanceof Level){
+				$level->broadcastLevelSoundEvent($this->getHolder(), LevelSoundEventPacket::SOUND_CHEST_OPEN);
 				$level->addChunkPacket($this->right->getHolder()->getX() >> 4, $this->right->getHolder()->getZ() >> 4, $pk);
 			}
 		}
@@ -155,6 +157,7 @@ class DoubleChestInventory extends ChestInventory implements InventoryHolder {
 			$pk->case1 = 1;
 			$pk->case2 = 0;
 			if(($level = $this->right->getHolder()->getLevel()) instanceof Level){
+				$level->broadcastLevelSoundEvent($this->getHolder(), LevelSoundEventPacket::SOUND_CHEST_CLOSED);
 				$level->addChunkPacket($this->right->getHolder()->getX() >> 4, $this->right->getHolder()->getZ() >> 4, $pk);
 			}
 		}
